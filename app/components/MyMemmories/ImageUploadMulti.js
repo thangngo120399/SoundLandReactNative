@@ -5,8 +5,8 @@ import { StackActions } from "@react-navigation/native";
 import { useLogin } from "../../context/LoginProvider";
 import client from "../../api/client";
 
-const ImageUpload = ({ setFiles, files }) => {
-  const [profileImage, setProfileImage] = useState(files);
+const ImageUpload = ({ multiFile, setMultiFile }) => {
+  const [profileImage, setProfileImage] = useState("");
   const [progress, setProgress] = useState(0);
   const { setIsLoggedIn, profile } = useLogin();
   const token = profile.token;
@@ -26,11 +26,14 @@ const ImageUpload = ({ setFiles, files }) => {
 
       if (!response.cancelled) {
         setProfileImage(response.uri);
-        setFiles({
-          name: "image",
-          uri: response.uri,
-          type: "image/jpg",
-        });
+        setMultiFile([
+          ...multiFile,
+          {
+            name: "image",
+            uri: response.uri,
+            type: "image/jpg",
+          },
+        ]);
       }
     }
   };
@@ -39,7 +42,7 @@ const ImageUpload = ({ setFiles, files }) => {
     <View style={styles.container}>
       <View>
         <TouchableOpacity
-          // onPress={openImageLibrary}
+          onPress={openImageLibrary}
           style={styles.uploadBtnContainer}
         >
           {profileImage ? (
@@ -63,9 +66,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   uploadBtnContainer: {
-    height: 125,
-    width: 125,
-    borderRadius: 125 / 2,
+    height: 110,
+    width: 110,
+    marginRight: 10,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
     borderStyle: "dashed",

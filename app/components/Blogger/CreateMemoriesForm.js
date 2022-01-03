@@ -58,7 +58,7 @@ const CreateMemoriesForm = ({ navigation }) => {
     formData.append("causeOfDeath", causeOfDeath);
     formData.append("ralationship", ralationship);
     formData.append("biography", biography);
-    formData.append("privacyType", 1);
+    formData.append("privacyType", Number(privacyType));
 
     try {
       MemoriesService.createMemory(formData).then((response) => {
@@ -125,7 +125,17 @@ const CreateMemoriesForm = ({ navigation }) => {
         autoCapitalize="none"
       />
       <View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: 10,
+          }}
+        >
+          <Text style={{ fontWeight: "bold" }}>Privacy Type</Text>
+        </View>
         <Picker
+          style={{ marginTop: -70 }}
           selectedValue={privacyType}
           onValueChange={(value, itemIndex) =>
             handleOnChangeText(value, "privacyType")
