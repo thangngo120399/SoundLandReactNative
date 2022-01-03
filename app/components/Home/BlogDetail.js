@@ -81,7 +81,7 @@ function BlogDetail() {
             />
           </View>
           <View style={styles.sliderCardList_3}>
-            <Comments data={data3.listContributions}></Comments>
+            <Comments data={data3.listContributions} idMemo = {id}></Comments>
           </View>
         </View>
       )}
