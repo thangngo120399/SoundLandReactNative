@@ -25,6 +25,7 @@ import Comments from "../Comment/comments";
 import BlogDetail from "./EditMyMemories";
 const { width } = Dimensions.get("window");
 import { useLogin } from "../../context/LoginProvider";
+import axios from "axios";
 
 // LogBox.ignoreLogs(["Warning: ..."]);
 
@@ -52,17 +53,35 @@ function HomeScreen({ navigation: { navigate } }) {
   }, []);
 
   useEffect(() => {
-    fetch("https://soulland.herokuapp.com/api/posts/")
-      .then((response) => response.json())
-      .then((json) => setData1(json.content))
-      .catch((error) => console.error(error))
-      .finally(() => setLoading1(false));
-    fetch("https://soulland.herokuapp.com/api/posts/")
-      .then((response) => response.json())
-      .then((json) => setData(json))
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
-  }, [refreshing]);
+       axios.get("https://soulland.herokuapp.com/api/user/posts", {
+        })
+        // .then((response) => console.log(response.data))
+        .then((response) => setData1(response.data.content))
+        .then(setLoading1(false))
+        .catch((error) => {
+          alert(error);
+        });
+
+        axios.get("https://soulland.herokuapp.com/api/user/posts", {
+        })
+        // .then((response) => response.json())
+        .then((response) => setData(response.data))
+        .then(setLoading(false))
+        .catch((error) => {
+          alert(error);
+        });
+
+    // fetch("https://soulland.herokuapp.com/api/posts")
+    //   .then((response) => response.json())
+    //   .then((json) => setData1(json.content))
+    //   .catch((error) => console.error(error))
+    //   .finally(() => setLoading1(false));
+    // fetch("https://soulland.herokuapp.com/api/posts")
+    //   .then((response) => response.json())
+    //   .then((json) => setData(json))
+    //   .catch((error) => console.error(error))
+    //   .finally(() => setLoading(false));
+  }, []);
 
   return (
     <ScrollView
