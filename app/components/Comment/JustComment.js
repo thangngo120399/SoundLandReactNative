@@ -1,5 +1,5 @@
-import React, { Component } from "react";
 import { View } from "react-native";
+import React, { useState, useEffect } from "react";
 import {
     ActivityIndicator,
     FlatList,
@@ -30,12 +30,12 @@ function Comment(props) {
           </View>
           <View style={styles.contentContainer}>
             <Text>
-              <Text style={[styles.text, styles.name]}>{props.data.fullName}</Text>
+              <Text style={[styles.text, styles.name]}>{props.data.username}</Text>
               {' '}
-              <Text style={styles.text}>{props.data.object.mess}</Text>
+              <Text style={styles.text}>{props.data.textComment}</Text>
             </Text>
             {/* <Text style={[styles.text, styles.created]}>{moment(created).fromNow()}</Text> */}
-            <Text style={[styles.text, styles.created]}>{props.data.object.lastUpdatedDate.split('T')[0]}</Text>
+            <Text style={[styles.text, styles.created]}>Just now</Text>
           </View>
         </View>
       );
