@@ -38,7 +38,13 @@ const CreateMemoriesForm = ({ navigation }) => {
     biography,
     privacyType,
   } = userInfo;
-
+  const reset = () => {
+    handleOnChangeText("", "fullName");
+    handleOnChangeText("", "gender");
+    handleOnChangeText("", "causeOfDeath");
+    handleOnChangeText("", "ralationship");
+    handleOnChangeText("", "biography");
+  };
   const handleOnChangeText = (value, fieldName) => {
     setUserInfo({ ...userInfo, [fieldName]: value });
   };
@@ -63,7 +69,7 @@ const CreateMemoriesForm = ({ navigation }) => {
     try {
       MemoriesService.createMemory(formData).then((response) => {
         alert("Added memory success!");
-        // setReload(!reload);
+        reset();
         navigation.navigate("Home");
         // setProfile(response.data);
 

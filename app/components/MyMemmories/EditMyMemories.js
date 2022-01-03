@@ -10,6 +10,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import ImageUpload from "./ImageUpload";
 import ImageUploadMulti from "./ImageUploadMulti";
 import Comments from "../Comment/comments";
+import MemoriesServices from "../../service/memories.services";
+import DateTimePicker from "@react-native-community/datetimepicker";
+
+import { format } from "date-fns";
+
 import {
   ActivityIndicator,
   Picker,
@@ -29,7 +34,12 @@ import {
 const { width } = Dimensions.get("window");
 const BlogDetail = () => {
   const [files, setFiles] = useState();
-  const [multiFile, setMultiFile] = useState();
+  const [multiFile, setMultiFile] = useState([]);
+
+  const [birthDate, setBirthDate] = useState(new Date());
+  const [deathDate, setDeathDate] = useState(new Date());
+  const [date, setDate] = useState(new Date());
+
   const route = useRoute();
   const id = route.params.id;
   const [isLoading, setLoading] = useState(true);
@@ -48,8 +58,6 @@ const BlogDetail = () => {
   const [moreInformation, setMoreInformation] = useState({
     location: "",
     nickName: "",
-    birthDate: "",
-    deathDate: "",
   });
 
   const {
@@ -61,7 +69,7 @@ const BlogDetail = () => {
     privacyType,
   } = userInfo;
 
-  const { location, nickName, birthDate, deathDate } = moreInformation;
+  const { location, nickName } = moreInformation;
 
   const [error, setError] = useState("");
   const handleOnChangeText = (value, fieldName) => {
@@ -71,6 +79,17 @@ const BlogDetail = () => {
   const handleOnChangeTextMoreInformation = (value, fieldName) => {
     setMoreInformation({ ...moreInformation, [fieldName]: value });
   };
+
+  const onChangeBirthDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setBirthDate(currentDate);
+  };
+
+  const onChangeDeathDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setDeathDate(currentDate);
+  };
+
   useEffect(() => {
     fetch(`https://soulland.herokuapp.com/api/memos/api/memos/id?id=${id}`)
       .then((response) => response.json())
@@ -84,7 +103,23 @@ const BlogDetail = () => {
 
   const submitForm = () => {};
   const submitFormMoreInformation = () => {
-    console.log(moreInformation.location);
+    const moreData = new FormData();
+    moreData.append("idMemorials", id);
+    multiFile.map((item, index) => {
+      moreData.append("files", item);
+    });
+
+    moreData.append("location", location);
+    moreData.append("nickName", nickName);
+    moreData.append("birthDate", format(birthDate, "yyyy/MM/dd"));
+    moreData.append("deathDate", format(deathDate, "yyyy/MM/dd"));
+    try {
+      MemoriesServices.updateMoreDataMemory(moreData).then((response) => {
+        alert("Added memory success!");
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <ScrollView>
@@ -183,9 +218,18 @@ const BlogDetail = () => {
                 </Text>
               ) : null}
               <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-                <ImageUploadMulti setMultiFile={setMultiFile} />
-                <ImageUploadMulti setMultiFile={setMultiFile} />
-                <ImageUploadMulti setMultiFile={setMultiFile} />
+                <ImageUploadMulti
+                  multiFile={multiFile}
+                  setMultiFile={setMultiFile}
+                />
+                <ImageUploadMulti
+                  multiFile={multiFile}
+                  setMultiFile={setMultiFile}
+                />
+                <ImageUploadMulti
+                  multiFile={multiFile}
+                  setMultiFile={setMultiFile}
+                />
               </View>
               <FormInput
                 value={location}
@@ -205,55 +249,48 @@ const BlogDetail = () => {
                 placeholder="Tome"
                 autoCapitalize="none"
               />
+              <View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: 10,
+                  }}
+                >
+                  <Text style={{ fontWeight: "bold" }}>BirthDay</Text>
+                </View>
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={birthDate}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChangeBirthDate}
+                />
+              </View>
+              <View style={{ marginBottom: 20 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: 10,
+                  }}
+                >
+                  <Text style={{ fontWeight: "bold" }}>DeathDate</Text>
+                </View>
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={deathDate}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChangeDeathDate}
+                />
+              </View>
 
               <FormSubmitButton
                 onPress={submitFormMoreInformation}
                 title="Add"
               />
             </FormContainer>
-          </View>
-          <View>
-            <View style={styles.singleBlog}>
-              <Text style={styles.singleBlogCategory}>{data3.fullName}</Text>
-              <Text style={styles.singleBlogTitle}>{data3.nickName}</Text>
-              <Image
-                style={styles.singleBlogImage}
-                source={{ uri: data3.urlImage }}
-              />
-              {/* <Text style={styles.singleBlogDetail} source={{ html: data3.biography }} contentWidth={contentWidth} /> */}
-              <Text style={styles.singleBlogDetail} contentWidth={contentWidth}>
-                {data3.biography}
-              </Text>
-            </View>
-            <View style={styles.sliderCardList_3}>
-              <Text style={styles.singleBlogTitle_}>Photos</Text>
-              <SwiperFlatList
-                autoplay
-                autoplayDelay={2}
-                autoplayLoop
-                index={1}
-                data={data3.urlListImage}
-                style={styles.sliderCardList}
-                renderItem={({ item }) => (
-                  <ImageBackground
-                    style={styles.sliderCard}
-                    source={{ uri: item }}
-                  >
-                    <TouchableOpacity style={styles.sliderCardContent}>
-                      <LinearGradient
-                        style={styles.sliderCardContent}
-                        colors={["#ffffff2e", "#ffffff2e", "#07090ef2"]}
-                      >
-                        {/* <Text style={styles.sliderCardTitle}></Text> */}
-                      </LinearGradient>
-                    </TouchableOpacity>
-                  </ImageBackground>
-                )}
-              />
-            </View>
-            <View style={styles.sliderCardList_3}>
-              <Comments data={data3.listContributions}></Comments>
-            </View>
           </View>
         </View>
       )}

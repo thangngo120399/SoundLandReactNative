@@ -24,6 +24,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Comments from "../Comment/comments";
 import BlogDetail from "./EditMyMemories";
 const { width } = Dimensions.get("window");
+import { useLogin } from "../../context/LoginProvider";
 
 // LogBox.ignoreLogs(["Warning: ..."]);
 
@@ -33,7 +34,7 @@ const { width } = Dimensions.get("window");
 function HomeScreen({ navigation: { navigate } }) {
   const [isLoading, setLoading1] = useState(true);
   const [data, setData1] = useState([]);
-
+  const { setIsLoggedIn, profile } = useLogin();
   const [isLoading2, setLoading] = useState(true);
   const [data2, setData] = useState([]);
 
@@ -51,12 +52,12 @@ function HomeScreen({ navigation: { navigate } }) {
   }, []);
 
   useEffect(() => {
-    fetch("https://soulland.herokuapp.com/api/memos?page=0&size=15")
+    fetch("https://soulland.herokuapp.com/api/posts/")
       .then((response) => response.json())
       .then((json) => setData1(json.content))
       .catch((error) => console.error(error))
       .finally(() => setLoading1(false));
-    fetch("https://soulland.herokuapp.com/api/memos?page=0&size=15")
+    fetch("https://soulland.herokuapp.com/api/posts/")
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => console.error(error))

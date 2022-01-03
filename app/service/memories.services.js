@@ -18,4 +18,21 @@ const createMemory = (formData) => {
       alert(error);
     });
 };
-export default { createMemory };
+
+const updateMoreDataMemory = (moreData) => {
+  console.log(moreData);
+  return axios
+    .put(API_URL + "saveplacetime", moreData, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      alert(error);
+    });
+};
+export default { createMemory, updateMoreDataMemory };

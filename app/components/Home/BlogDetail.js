@@ -60,7 +60,7 @@ function BlogDetail() {
               autoplay
               autoplayDelay={2}
               autoplayLoop
-              index={1}
+              index={0}
               data={data3.urlListImage}
               style={styles.sliderCardList}
               renderItem={({ item }) => (
@@ -81,7 +81,7 @@ function BlogDetail() {
             />
           </View>
           <View style={styles.sliderCardList_3}>
-            <Comments data={data3.listContributions} idMemo = {id}></Comments>
+            <Comments data={data3.listContributions} idMemo={id}></Comments>
           </View>
         </View>
       )}
