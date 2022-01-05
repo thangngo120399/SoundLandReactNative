@@ -14,29 +14,28 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object({
-  fullName: Yup.string()
-    .trim()
-    .min(3, "Invalid name!")
-    .required("Name is required!"),
+  // fullName: Yup.string()
+  //   .trim()
+  //   .min(3, "Invalid name!")
+  //   .required("Name is required!"),
   email: Yup.string().email("Invalid email!").required("Email is required!"),
   username: Yup.string().required("Username is required!"),
   password: Yup.string()
     .trim()
-    .min(8, "Password is too short!")
+    .min(5, "Password is too short!")
     .required("Password is required!"),
 });
 
 const SignupForm = ({ navigation }) => {
   const userInfo = {
     email: "",
-    fullName: "",
     password: "",
     username: "",
   };
 
   const [error, setError] = useState("");
 
-  const { email, fullName, password, username } = userInfo;
+  const { email, password, username } = userInfo;
 
   const handleOnChangeText = (value, fieldName) => {
     setUserInfo({ ...userInfo, [fieldName]: value });
@@ -47,8 +46,8 @@ const SignupForm = ({ navigation }) => {
     if (!isValidObjField(userInfo))
       return updateError("Required all fields!", setError);
     // if valid name with 3 or more characters
-    if (!fullName.trim() || fullName.length < 3)
-      return updateError("Invalid name!", setError);
+    // if (!fullName.trim() || fullName.length < 3)
+    //   return updateError("Invalid name!", setError);
     // only valid email id is allowed
     if (!isValidEmail(email)) return updateError("Invalid email!", setError);
     // password must have 8 or more characters
@@ -62,6 +61,18 @@ const SignupForm = ({ navigation }) => {
     if (isValidForm()) {
       // submit form
       console.log(userInfo);
+
+      try {
+        AccountService.register({ ...userInfo }).then((response) => {
+          // setUserInfo({ username: "", password: "" });
+          // setProfile(response.data);
+          
+          // setIsLoggedIn(true);
+        }).then(console.log("Registered successfully"));
+      } catch (error) {
+        console.log(error);
+      }
+
     }
   };
 
@@ -106,17 +117,17 @@ const SignupForm = ({ navigation }) => {
           handleBlur,
           handleSubmit,
         }) => {
-          const { email, fullName, username, password } = values;
+          const { email, username, password } = values;
           return (
             <>
-              <FormInput
+              {/* <FormInput
                 value={fullName}
                 error={touched.fullName && errors.fullName}
                 onChangeText={handleChange("fullName")}
                 onBlur={handleBlur("fullName")}
                 label="Full Name"
                 placeholder="John Smith"
-              />
+              /> */}
               <FormInput
                 value={email}
                 error={touched.email && errors.email}

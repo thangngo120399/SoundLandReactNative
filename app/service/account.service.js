@@ -8,6 +8,7 @@ const register = (values) => {
       ...values,
     })
     .then((response) => {
+      alert('Registered successfully');
       return response;
     })
     .catch((error) => {

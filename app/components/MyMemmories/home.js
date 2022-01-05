@@ -70,17 +70,6 @@ function HomeScreen({ navigation: { navigate } }) {
         .catch((error) => {
           alert(error);
         });
-
-    // fetch("https://soulland.herokuapp.com/api/posts")
-    //   .then((response) => response.json())
-    //   .then((json) => setData1(json.content))
-    //   .catch((error) => console.error(error))
-    //   .finally(() => setLoading1(false));
-    // fetch("https://soulland.herokuapp.com/api/posts")
-    //   .then((response) => response.json())
-    //   .then((json) => setData(json))
-    //   .catch((error) => console.error(error))
-    //   .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -97,7 +86,7 @@ function HomeScreen({ navigation: { navigate } }) {
             autoplay
             autoplayDelay={2}
             autoplayLoop
-            index={1}
+            index={0}
             data={data2.content}
             style={styles.sliderCardList}
             renderItem={({ item }) => (

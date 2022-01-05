@@ -54,32 +54,35 @@ function BlogDetail() {
               {data3.biography}
             </Text>
           </View>
-          <View style={styles.sliderCardList_3}>
-            <Text style={styles.singleBlogTitle_}>Photos</Text>
-            <SwiperFlatList
-              autoplay
-              autoplayDelay={2}
-              autoplayLoop
-              index={0}
-              data={data3.urlListImage}
-              style={styles.sliderCardList}
-              renderItem={({ item }) => (
-                <ImageBackground
-                  style={styles.sliderCard}
-                  source={{ uri: item }}
-                >
-                  <TouchableOpacity style={styles.sliderCardContent}>
-                    <LinearGradient
-                      style={styles.sliderCardContent}
-                      colors={["#ffffff2e", "#ffffff2e", "#07090ef2"]}
-                    >
-                      {/* <Text style={styles.sliderCardTitle}></Text> */}
-                    </LinearGradient>
-                  </TouchableOpacity>
-                </ImageBackground>
-              )}
-            />
-          </View>
+          {
+            data3.urlListImage ? (<View style={styles.sliderCardList_3}>
+              <Text style={styles.singleBlogTitle_}>Photos</Text>
+              <SwiperFlatList
+                autoplay
+                autoplayDelay={2}
+                autoplayLoop
+                index={0}
+                data={data3.urlListImage}
+                style={styles.sliderCardList}
+                renderItem={({ item }) => (
+                  <ImageBackground
+                    style={styles.sliderCard}
+                    source={{ uri: item }}
+                    source={ item ? {uri: item } : null}
+                  >
+                    <TouchableOpacity style={styles.sliderCardContent}>
+                      <LinearGradient
+                        style={styles.sliderCardContent}
+                        colors={["#ffffff2e", "#ffffff2e", "#07090ef2"]}
+                      >
+                        {/* <Text style={styles.sliderCardTitle}></Text> */}
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </ImageBackground>
+                )}
+              />
+            </View>):(<View><Text>No photos</Text></View>)
+          }
           <View style={styles.sliderCardList_3}>
             <Comments data={data3.listContributions} idMemo={id}></Comments>
           </View>
